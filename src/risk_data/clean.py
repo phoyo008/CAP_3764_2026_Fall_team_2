@@ -42,7 +42,11 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
 def clean(raw_dir: Path = RAW_DATA_DIR, processed_dir: Path = PROCESSED_DATA_DIR) -> pd.DataFrame:
     """Load the raw CSV, clean it, save it to the processed folder, and return it."""
-    csv_files = sorted(Path(raw_dir).glob("*.csv"))
+    # kagglehub saves the file in a dataset subfolder, so search recursively
+    # (and skip Jupyter checkpoint copies of the CSV).
+    csv_files = sorted(
+        p for p in Path(raw_dir).rglob("*.csv") if ".ipynb_checkpoints" not in p.parts
+    )
     if not csv_files:
         raise FileNotFoundError(f"No CSV file found in {raw_dir}")
 
