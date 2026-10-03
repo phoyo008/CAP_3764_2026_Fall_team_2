@@ -43,8 +43,8 @@ src/risk_data/
 | Person   | Branch                    | Task                                                      |
 |----------|---------------------------|-------------------------------------------------------------|
 | Pablo    | setup/scaffolding         | Repo structure, conda env, .gitignore, module stubs, README |
-| Pablo    | feature/eda-numerical     | Numeric summary stats, correlation heatmap, distribution plots |
-| Helen    | feature/data-collection   | `collect.py` — automated download via kagglehub             |
+| Pablo    | feature/data-collection   | `collect.py` — automated download via kagglehub (done)      |
+| Helen    | feature/eda-numerical     | Numeric summary stats, correlation heatmap, distribution plots |
 | Lilly    | feature/data-cleaning     | `clean.py` — dedup, missing values, dtype conversion         |
 | Jorlfran | feature/eda-categorical   | Categorical breakdowns, summary tables, visualizations       |
 
