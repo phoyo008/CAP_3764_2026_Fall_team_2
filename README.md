@@ -33,7 +33,7 @@ In JupyterLab, select the **Python (cap3764-risk)** kernel for any notebook in t
 | Raw size | 5,000 rows x 20 columns |
 | Time span | 2015-03-31 to 2024-12-31 (`Date`) |
 | Numerical variables | Total_Assets, Total_Liabilities, Current_Assets, Current_Liabilities, Net_Income, Revenue, Operating_Income, Cash_Flow, Debt_Equity_Ratio, Return_on_Assets, Working_Capital_Ratio, Stock_Price_Close, Volatility_Index, GDP_Growth_Rate, Interest_Rate, Inflation_Rate |
-| Categorical variables | Industry_Sector (5 sectors), Financial_Risk_Label (0/1, 1 = at risk) |
+| Categorical variables | Industry_Sector (6 sectors), Financial_Risk_Label (0/1, 1 = at risk) |
 | Identifiers | Company_ID, Date |
 | Class balance | ~16.1% at risk, ~83.9% not at risk |
 
