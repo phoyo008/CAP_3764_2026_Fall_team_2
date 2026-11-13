@@ -1,0 +1,19 @@
+name: cap3764-risk
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11.16
+  - pandas=3.0.6
+  - numpy=2.4.6
+  - scipy=1.17.1
+  - matplotlib=3.11.2
+  - seaborn=0.13.2
+  - plotly=7.1.0
+  - jupyterlab=4.6.4
+  - ipykernel=7.3.0
+  - pip=26.2.1
+  - pip:
+      - kagglehub==1.0.2
+      # installs the local risk_data package (src/risk_data) in editable mode;
+      # run `conda env create` from the project root so "." resolves correctly
+      - -e .

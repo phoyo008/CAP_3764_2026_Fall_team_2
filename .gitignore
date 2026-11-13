@@ -7,3 +7,7 @@ data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 .DS_Store
+
+*.egg-info/
+.ruff_cache/
+Untitled*.ipynb

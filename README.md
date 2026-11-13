@@ -9,22 +9,6 @@ data collection, cleaning, and initial EDA — modeling/forecasting comes later
 (Total_Assets, Revenue, Debt_Equity_Ratio, ...), macro indicators (GDP_Growth_Rate,
 Inflation_Rate), Industry_Sector, and a binary Financial_Risk_Label.
 
-## Setup
-
-```bash
-git clone https://github.com/phoyo008/CAP_3764_2026_Fall_team_2.git
-cd CAP_3764_2026_Fall_team_2
-
-conda env create -f environment.yml
-conda activate cap3764-risk
-
-python -m ipykernel install --user --name cap3764-risk --display-name "Python (cap3764-risk)"
-
-jupyter lab
-```
-
-In JupyterLab, select the **Python (cap3764-risk)** kernel for any notebook in this project.
-
 ## Dataset at a Glance
 
 | Item | Detail |
@@ -42,15 +26,31 @@ with a company being labeled financially at risk, as groundwork for the modeling
 
 ## Setup
 
+Requires [conda](https://docs.conda.io/) (Miniconda or Anaconda) and a free
+[Kaggle account](https://www.kaggle.com/) for the data download.
+
 ```bash
 git clone https://github.com/phoyo008/CAP_3764_2026_Fall_team_2.git
 cd CAP_3764_2026_Fall_team_2
 
-conda env create -f environment.yml
+# run from the project root: the file also installs the local risk_data package
+conda env create -f environment-cap3764-final-project.yml
 conda activate cap3764-risk
 
 python -m ipykernel install --user --name cap3764-risk --display-name "Python (cap3764-risk)"
 ```
+
+All package versions are pinned in `environment-cap3764-final-project.yml`. After changing
+dependencies, update it with `conda env update -f environment-cap3764-final-project.yml --prune`.
+In JupyterLab, select the **Python (cap3764-risk)** kernel for every notebook.
+
+## Getting the Data
+
+The `data/` folders are empty on `main` on purpose: the dataset belongs to Kaggle and is
+gitignored. Recreate it with the two scripts below (see *Reproduce the Analysis*). They
+download the CSV to `data/raw/` and write the cleaned file to `data/processed/cleaned_data.csv`.
+Manual alternative: download the dataset from the Kaggle link above and unzip the CSV
+anywhere under `data/raw/`.
 
 ## Reproduce the Analysis
 
@@ -71,13 +71,17 @@ data/
 ├── raw/                          # untouched downloads (gitignored)
 └── processed/                    # cleaned datasets (gitignored)
 notebooks/
-├── eda_numerical.ipynb           # numerical EDA (Helen)
+├── 01_eda_numerical.ipynb        # numerical EDA (Helen)
 └── 02_eda_categorical.ipynb      # categorical EDA (Jorlfran)
 reports/figures/                  # exported numerical charts
+docs/TEAM_WORKFLOW.md             # task assignments, reviewers, timeline
+AGENTS.md                         # rules for AI agents and teammates
+.claude/skills/                   # /load-working and /cap3764-handoff
 src/risk_data/
 ├── collect.py                    # Kaggle download via kagglehub (Pablo)
 └── clean.py                      # dedup, dtype conversion, median fill (Lilly)
-environment.yml                   # conda environment (cap3764-risk)
+environment-cap3764-final-project.yml  # pinned conda environment (cap3764-risk)
+pyproject.toml                    # makes src/risk_data installable (pip install -e .)
 ```
 
 ## Data Collection & Cleaning
@@ -92,7 +96,7 @@ environment.yml                   # conda environment (cap3764-risk)
 
 ## Exploratory Data Analysis
 
-**Numerical** (`notebooks/eda_numerical.ipynb`): summary statistics (mean, median, std, skew,
+**Numerical** (`notebooks/01_eda_numerical.ipynb`): summary statistics (mean, median, std, skew,
 kurtosis) for every numeric column, histograms/KDE and box plots, correlation heatmap,
 financial ratios by risk label, IQR outlier audit, and a raw-vs-cleaned row audit.
 Figures are saved to `reports/figures/numerical_*.png`.
@@ -119,6 +123,24 @@ Preliminary insights:
 
 Every task was developed on its own branch and merged into `main` through a pull request.
 
+### Second submission: task assignments
+
+Full details, review rotation and timeline: [`docs/TEAM_WORKFLOW.md`](docs/TEAM_WORKFLOW.md).
+
+| Person   | Branch                          | Task |
+|----------|---------------------------------|------|
+| Pablo    | `feature/modeling`              | Add scikit-learn to the env; modeling and evaluation notebook; `src/risk_data/modeling.py` |
+| Jorlfran | `feature/categorical-eda-update`| Update categorical EDA: use `risk_data`, add comments, remove unused cells |
+| Lilly    | `feature/cleaning-notebook`     | `00_data_cleaning.ipynb` with documented missing-value handling |
+| Lilly    | `docs/final-repo-check`         | Fresh-clone reproducibility run and README/checklist fixes |
+| Helen    | `docs/numerical-eda-cleanup`    | Tidy numerical EDA and add modeling implications |
+| Helen    | `docs/executive-summary`        | Executive summary (max 600 words) |
+
+### Working with AI agents
+
+Read [`AGENTS.md`](AGENTS.md) first. In Claude Code, run `/load-working` to sync with `main` and
+start your assigned task, and `/cap3764-handoff` when you are done to verify, push, and prepare the PR.
+
 ## Next Steps
 
 - Decide how to treat the 1,425 removed duplicates and the extreme values flagged by the IQR audit.
@@ -128,7 +150,7 @@ Every task was developed on its own branch and merged into `main` through a pull
 ## Submission Checklist
 
 - [x] Team repo, per-task branches, pull requests
-- [x] Conda environment and `environment.yml`
+- [x] Conda environment (`environment-cap3764-final-project.yml`, pinned versions)
 - [x] Data collection module and initial cleaning
 - [x] Numerical and categorical EDA with tables and visualizations
 - [ ] Slide deck
