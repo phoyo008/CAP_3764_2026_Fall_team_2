@@ -40,7 +40,8 @@ docs/            TEAM_WORKFLOW.md
 5. **Modeling** (if your task): stratified split, no leakage (fit preprocessing on train only), report precision/recall/F1/ROC-AUC/PR-AUC rather than accuracy alone, state limitations honestly.
 6. **Reporting**: numbers in prose must come from executed notebook output, never invented. Executive summary max 600 words.
 7. **Be honest**: if something fails or was not run, say so. Do not claim it passed.
-8. Do not add files in the repo root. Do not commit `.pptx`, caches, or checkpoints.
+8. **No AI attribution**: do not add `Co-Authored-By: Claude`, "Generated with Claude Code", or similar lines to commits or PR descriptions. `.claude/settings.json` disables it; if your tool still adds one, remove it before committing.
+9. Do not add files in the repo root. Do not commit `.pptx`, caches, or checkpoints.
 
 ## Slash commands (skills)
 
