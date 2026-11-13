@@ -71,15 +71,23 @@ data/
 ├── raw/                          # untouched downloads (gitignored)
 └── processed/                    # cleaned datasets (gitignored)
 notebooks/
+├── 00_data_cleaning.ipynb        # cleaning + missing-value strategy (Lilly)
 ├── 01_eda_numerical.ipynb        # numerical EDA (Helen)
-└── 02_eda_categorical.ipynb      # categorical EDA (Jorlfran)
-reports/figures/                  # exported numerical charts
+├── 02_eda_categorical.ipynb      # categorical EDA (Jorlfran)
+├── 04_modeling.ipynb             # core models and evaluation (Pablo)
+├── 05_feature_importance.ipynb   # (Helen)
+├── 06_leakage_and_sensitivity.ipynb  # (Jorlfran)
+└── 07_tuning.ipynb               # (Lilly)
+reports/figures/                  # exported charts
+tests/                            # pytest tests for src/risk_data
 docs/TEAM_WORKFLOW.md             # task assignments, reviewers, timeline
+docs/MODELING_NOTES.md            # modeling findings and notebook briefs
 AGENTS.md                         # rules for AI agents and teammates
-.claude/skills/                   # /load-working and /cap3764-handoff
+.agents/skills/                   # agent skills (Codex); mirrored in .claude/skills/ (Claude Code)
 src/risk_data/
 ├── collect.py                    # Kaggle download via kagglehub (Pablo)
-└── clean.py                      # dedup, dtype conversion, median fill (Lilly)
+├── clean.py                      # dedup, dtype conversion, median fill (Lilly)
+└── modeling.py                   # split, pipelines, CV, metrics (Pablo)
 environment-cap3764-final-project.yml  # pinned conda environment (cap3764-risk)
 pyproject.toml                    # makes src/risk_data installable (pip install -e .)
 ```
@@ -127,19 +135,23 @@ Every task was developed on its own branch and merged into `main` through a pull
 
 Full details, review rotation and timeline: [`docs/TEAM_WORKFLOW.md`](docs/TEAM_WORKFLOW.md).
 
-| Person   | Branch                          | Task |
-|----------|---------------------------------|------|
-| Pablo    | `feature/modeling`              | Add scikit-learn to the env; modeling and evaluation notebook; `src/risk_data/modeling.py` |
-| Jorlfran | `feature/categorical-eda-update`| Update categorical EDA: use `risk_data`, add comments, remove unused cells |
-| Lilly    | `feature/cleaning-notebook`     | `00_data_cleaning.ipynb` with documented missing-value handling |
-| Lilly    | `docs/final-repo-check`         | Fresh-clone reproducibility run and README/checklist fixes |
-| Helen    | `docs/numerical-eda-cleanup`    | Tidy numerical EDA and add modeling implications |
-| Helen    | `docs/executive-summary`        | Executive summary (max 600 words) |
+| Person   | Branch                           | Task |
+|----------|----------------------------------|------|
+| Pablo    | `feature/modeling`               | Modeling module, tests and `04_modeling.ipynb` |
+| Lilly    | `feature/cleaning-notebook`      | `00_data_cleaning.ipynb` with documented missing-value handling |
+| Lilly    | `feature/model-tuning`           | `07_tuning.ipynb` |
+| Jorlfran | `feature/categorical-eda-update` | Update categorical EDA to use `risk_data` |
+| Jorlfran | `feature/leakage-sensitivity`    | `06_leakage_and_sensitivity.ipynb` |
+| Jorlfran | `docs/final-repo-check`          | Fresh-clone reproducibility run, README fixes |
+| Helen    | `docs/numerical-eda-cleanup`     | Tidy numerical EDA, modeling implications |
+| Helen    | `feature/feature-importance`     | `05_feature_importance.ipynb` |
+| Helen    | `docs/executive-summary`         | Executive summary (max 600 words) |
 
 ### Working with AI agents
 
-Read [`AGENTS.md`](AGENTS.md) first. In Claude Code, run `/load-working` to sync with `main` and
-start your assigned task, and `/cap3764-handoff` when you are done to verify, push, and prepare the PR.
+Read [`AGENTS.md`](AGENTS.md) first. Run `/load-working` (Claude Code) or `$load-working` (Codex) to
+sync with `main` and start your assigned task, and `/cap3764-handoff` or `$cap3764-handoff` when you are
+done to verify, push, and prepare the PR.
 
 ## Next Steps
 
