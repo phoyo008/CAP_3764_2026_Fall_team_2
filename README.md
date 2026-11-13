@@ -74,10 +74,13 @@ notebooks/
 ├── 01_eda_numerical.ipynb        # numerical EDA (Helen)
 └── 02_eda_categorical.ipynb      # categorical EDA (Jorlfran)
 reports/figures/                  # exported numerical charts
+docs/TEAM_WORKFLOW.md             # task assignments, reviewers, timeline
+AGENTS.md                         # rules for AI agents and teammates
+.claude/skills/                   # /load-working and /cap3764-handoff
 src/risk_data/
 ├── collect.py                    # Kaggle download via kagglehub (Pablo)
 └── clean.py                      # dedup, dtype conversion, median fill (Lilly)
-environment-cap3764-final-project.yml      # pinned conda environment (cap3764-risk)
+environment-cap3764-final-project.yml  # pinned conda environment (cap3764-risk)
 pyproject.toml                    # makes src/risk_data installable (pip install -e .)
 ```
 
@@ -119,6 +122,24 @@ Preliminary insights:
 | Jorlfran | feature/eda-categorical   | Categorical breakdowns, summary tables, visualizations       | #6 |
 
 Every task was developed on its own branch and merged into `main` through a pull request.
+
+### Second submission: task assignments
+
+Full details, review rotation and timeline: [`docs/TEAM_WORKFLOW.md`](docs/TEAM_WORKFLOW.md).
+
+| Person   | Branch                          | Task |
+|----------|---------------------------------|------|
+| Pablo    | `feature/modeling`              | Add scikit-learn to the env; modeling and evaluation notebook; `src/risk_data/modeling.py` |
+| Jorlfran | `feature/categorical-eda-update`| Update categorical EDA: use `risk_data`, add comments, remove unused cells |
+| Lilly    | `feature/cleaning-notebook`     | `00_data_cleaning.ipynb` with documented missing-value handling |
+| Lilly    | `docs/final-repo-check`         | Fresh-clone reproducibility run and README/checklist fixes |
+| Helen    | `docs/numerical-eda-cleanup`    | Tidy numerical EDA and add modeling implications |
+| Helen    | `docs/executive-summary`        | Executive summary (max 600 words) |
+
+### Working with AI agents
+
+Read [`AGENTS.md`](AGENTS.md) first. In Claude Code, run `/load-working` to sync with `main` and
+start your assigned task, and `/cap3764-handoff` when you are done to verify, push, and prepare the PR.
 
 ## Next Steps
 
