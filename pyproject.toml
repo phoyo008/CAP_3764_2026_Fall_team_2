@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "risk-data"
+version = "0.1.0"
+description = "Data collection and cleaning for the CAP 3764 corporate financial risk project"
+requires-python = ">=3.11"
+dependencies = ["pandas", "kagglehub"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
