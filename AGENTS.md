@@ -1,6 +1,7 @@
 # AGENTS.md: CAP 3764 Team 2 (Corporate Financial Risk)
 
 Instructions for any AI coding agent (Claude Code, Codex, etc.) working in this repo.
+Claude Code reads this via `CLAUDE.md`; Codex reads it directly.
 Humans: read it too, it is the team contract.
 
 ## Project
@@ -12,6 +13,7 @@ Dataset: Kaggle `zoya77/corporate-financial-risk-assessment-dataset` (5,000 rows
 ## Source of truth for tasks
 
 `docs/TEAM_WORKFLOW.md` lists who owns which task, its branch name, deliverable, and who reviews it.
+`docs/MODELING_NOTES.md` has the modeling findings and the briefs for notebooks 05 to 07.
 **Work only on the task assigned to the person you are helping.** If asked to do something that
 belongs to someone else, say so and stop; suggest they ping the owner.
 
@@ -25,10 +27,12 @@ belongs to someone else, say so and stop; suggest they ping the owner.
 
 ```
 src/risk_data/   reusable code (collect, clean, modeling ...)
-notebooks/       00_data_cleaning, 01_eda_numerical, 02_eda_categorical, 04_modeling (numbered, in lifecycle order)
+notebooks/       00_data_cleaning, 01_eda_numerical, 02_eda_categorical, 04_modeling, 05_feature_importance, 06_leakage_and_sensitivity, 07_tuning (numbered in lifecycle order)
+tests/           pytest tests for src/risk_data
 reports/         figures/ and executive_summary.md
 data/raw, data/processed   gitignored, recreate with collect.py and clean.py. NEVER commit data.
-docs/            TEAM_WORKFLOW.md
+docs/            TEAM_WORKFLOW.md, MODELING_NOTES.md
+.agents/skills/  canonical agent skills (Codex); mirrored to .claude/skills/ (Claude Code)
 ```
 
 ## Rules
@@ -42,7 +46,19 @@ docs/            TEAM_WORKFLOW.md
 7. **Be honest**: if something fails or was not run, say so. Do not claim it passed.
 8. Do not add files in the repo root. Do not commit `.pptx`, caches, or checkpoints.
 
-## Slash commands (skills)
+## Skills (work in Claude Code and Codex)
 
-- `/load-working`: sync with `main`, find my assigned task, set up the branch, and do the task.
-- `/cap3764-handoff`: verify, commit, push, and leave the PR description ready for the reviewer.
+| Skill | Claude Code | Codex | Purpose |
+|-------|-------------|-------|---------|
+| `load-working` | `/load-working` | `$load-working` | Sync with `main`, find my assigned task, set up the branch, do the task |
+| `cap3764-handoff` | `/cap3764-handoff` | `$cap3764-handoff` | Verify, commit, push, and prepare the PR description |
+
+Edit skills only under `.agents/skills/`, then run `scripts/sync_skills.sh` and commit both copies.
+
+## Balanced contribution (graded)
+
+The rubric scores balanced participation. So: each person writes and commits their own task
+under their own git identity (set `git config user.name` / `user.email` to your real name and
+email); do not do a teammate's task for them or commit on their branch; review the PRs assigned
+to you with at least one substantive comment; write PR descriptions that explain what, why,
+how to test, and results.

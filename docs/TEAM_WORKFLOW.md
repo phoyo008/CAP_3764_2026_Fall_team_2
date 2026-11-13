@@ -6,45 +6,56 @@ real description, and a review from a *different* teammate.
 
 ## Task assignments
 
-Pablo takes the single hardest task (modeling); everything else is spread out so commit and
-PR history is balanced. Helen and Lilly get the easiest tasks.
+Every member owns distinct pieces of the pipeline, opens their own PRs, and reviews others.
+Pablo already did the setup and the core modeling code, so Pablo takes **no new work** beyond
+the modeling PR and reviews. See `docs/MODELING_NOTES.md` for findings and briefs.
 
-| # | Owner | Difficulty | Branch | Deliverable |
-|---|-------|-----------|--------|-------------|
-| 1 | Pablo | Hard | `feature/modeling` | Add `scikit-learn` to the pinned env; `notebooks/04_modeling.ipynb` (stratified split, baseline logistic regression, tree-based model, 84/16 imbalance handling, cross-validation, metrics, feature importance); reusable code in `src/risk_data/modeling.py` |
-| 2 | Jorlfran | Easy | `feature/categorical-eda-update` | Update `02_eda_categorical.ipynb`: load data via `risk_data`, add comments and section headers, remove unused cells |
-| 3 | Lilly | Easiest | `feature/cleaning-notebook` | `notebooks/00_data_cleaning.ipynb`: run `risk_data.clean`, show before/after row counts, document missing-value handling (numeric = median; categorical = none found, state the rule) |
-| 4 | Lilly | Easiest | `docs/final-repo-check` | Day-7 fresh-clone run (env, collect, clean, notebooks) and README/checklist fixes |
-| 5 | Helen | Easiest | `docs/numerical-eda-cleanup` | Tidy `01_eda_numerical.ipynb`: comments, section order, remove unneeded content; add a short "what this means for modeling" cell |
-| 6 | Helen | Easiest | `docs/executive-summary` | `reports/executive_summary.md` (max 600 words, template sections), written from Pablo's modeling results; Pablo and Jorlfran review for accuracy |
+| # | Owner | Branch | Deliverable |
+|---|-------|--------|-------------|
+| 1 | Pablo | `feature/modeling` | `src/risk_data/modeling.py`, `tests/`, `notebooks/04_modeling.ipynb`, `scikit-learn`/`pytest` pinned in the env. **Already built; this PR goes first** so everyone can import it |
+| 2 | Lilly | `feature/cleaning-notebook` | `notebooks/00_data_cleaning.ipynb`: run `risk_data.clean`, before/after row counts, documented missing-value strategy (numeric = median; categorical = none found, state the rule) |
+| 3 | Lilly | `feature/model-tuning` | `notebooks/07_tuning.ipynb` (brief in MODELING_NOTES) |
+| 4 | Jorlfran | `feature/categorical-eda-update` | Update `02_eda_categorical.ipynb`: load via `risk_data`, comments, section headers, remove unused cells |
+| 5 | Jorlfran | `feature/leakage-sensitivity` | `notebooks/06_leakage_and_sensitivity.ipynb` (brief in MODELING_NOTES) |
+| 6 | Helen | `docs/numerical-eda-cleanup` | Tidy `01_eda_numerical.ipynb`; add a short "what this means for modeling" cell |
+| 7 | Helen | `feature/feature-importance` | `notebooks/05_feature_importance.ipynb` (brief in MODELING_NOTES) |
+| 8 | Helen | `docs/executive-summary` | `reports/executive_summary.md` (max 600 words, template sections) from executed results |
+| 9 | Jorlfran | `docs/final-repo-check` | Fresh-clone run (env, collect, clean, every notebook top to bottom) and README/checklist fixes |
+
+Per person: Pablo 1 PR, Lilly 2, Jorlfran 3, Helen 3. Pablo's other contribution is review (below).
 
 ## Review rotation (so PR activity is balanced)
 
+Every PR needs one reviewer who is not the author, and the reviewer leaves at least one real comment.
+
 | PR | Author | Reviewer |
 |----|--------|----------|
-| 1 | Pablo | Jorlfran (code) and Lilly (docs) |
-| 2 | Jorlfran | Helen |
-| 3, 4 | Lilly | Jorlfran, Pablo |
-| 5 | Helen | Lilly |
-| 6 | Helen | Pablo and Jorlfran |
+| 1 | Pablo | Lilly |
+| 2, 3 | Lilly | Pablo (2), Helen (3) |
+| 4, 5, 9 | Jorlfran | Lilly (4), Pablo (5), Helen (9) |
+| 6, 7, 8 | Helen | Jorlfran (6), Lilly (7), Pablo (8) |
 
-Each PR description: what changed, why, how to test it, and a screenshot or table if relevant.
-Each reviewer leaves at least one real comment (not just "LGTM").
+Reviews: Pablo 3, Lilly 3, Helen 2, Jorlfran 1. Each PR description: what changed, why, how to
+test it, and results from executed output.
+
+## Rubric alignment
+
+| Rubric (20 pts each) | Where it is earned | Owners |
+|----------------------|--------------------|--------|
+| Data science lifecycle | 00 cleaning, 01/02 EDA, 04 to 07 modeling, summary: all phases connected | everyone |
+| Reproducibility and technical rigor | pinned env, installable package, tests, data instructions, fresh-clone check (#9) | Pablo, Jorlfran |
+| Modeling and evaluation | 04 core models, 05 importance, 06 leakage, 07 tuning, with honest limitations | Pablo, Helen, Jorlfran, Lilly |
+| Communication and reporting | executive summary (#8) and labelled figures | Helen |
+| GitHub collaboration | 9 PRs across 4 people, review rotation, descriptive commits | everyone |
+
+Collaboration tips: commit small and often on your own branch; use descriptive commit messages
+and PR descriptions; each person should also open a GitHub issue for their own task if they
+want issue credit (optional, not created for you). Submit the peer-review form individually.
 
 ## Timeline
 
-1. **Day 1** — merge env/organization PR (`chore/env-and-repo-organization`). Everyone pulls `main`, recreates the env, and confirms `import risk_data` works.
-2. **Days 2–4** — tasks 1 to 3 and 5 in parallel.
-3. **Days 5–6** — task 1 finishes; task 6 is written from its results.
-4. **Day 7** — fresh clone on a clean machine: create env, run collect → clean → notebooks top to bottom. Fix anything that fails.
-5. **Before submitting** — each member fills in the peer-review form; README checklist updated.
-
-## Rubric check
-
-| Rubric item | Covered by |
-|-------------|-----------|
-| Data science lifecycle | tasks 1, 2, 3, 5 (clean → EDA → model) |
-| Reproducibility | pinned env, `pyproject.toml`, task 4 (day-7 clean run) |
-| Modeling and evaluation | task 1 |
-| Communication and reporting | task 6 |
-| GitHub collaboration | branches + review rotation above |
+1. **Day 1**: Pablo pushes the modeling PR (#1); Lilly reviews and it merges. Everyone pulls `main`, recreates the env, and runs the load-working skill.
+2. **Days 2 to 4**: Lilly (#2, #3), Jorlfran (#4, #5), Helen (#6, #7) in parallel. #3, #5 and #7 need the merged modeling module.
+3. **Days 5 to 6**: Helen writes the executive summary (#8) from executed results; reviewers check numbers against notebooks.
+4. **Day 7**: Jorlfran runs the fresh-clone check (#9) and fixes what fails.
+5. **Before submitting**: each member files the peer-review form; README checklist updated.
