@@ -1,35 +1,40 @@
-# Executive summary: Corporate Financial Risk Assessment
+# Executive Summary Report
 
-**Draft for team review — sensitivity analysis and final reproducibility checks are pending.**
+Team Number: 2
+Date: November 15, 2026
+Subject: Corporate Financial Risk Assessment
 
-## Objective
+## Project Goal
 
-Assess which company financial characteristics are associated with `Financial_Risk_Label` and evaluate whether classifiers can identify companies labeled at risk. The label has no documented future prediction horizon; this project does not establish the ability to forecast future distress or default.
+Our goal was to identify financial characteristics associated with companies being labeled at risk and compare classification models. The findings help us understand this dataset, but do not establish that we can predict future financial distress.
 
-## Data and preparation
+## Major Findings
 
-The Kaggle dataset contains 5,000 records and 20 columns. Shared cleaning removed 1,425 exact duplicates, leaving 3,575 companies with no missing values. Each company appears once. Although records span 40 quarter-end dates from 2015 to 2024, they do not form repeated company histories suitable for company-level time series forecasting. There are 575 at-risk companies (16.08%), making accuracy alone an inadequate measure of usefulness.
+We started with 5,000 records and removed 1,425 exact duplicates, leaving 3,575 companies. No missing values were found. Of these companies, 575 (16.08%) were labeled at risk, so we focused on precision, recall, and average precision (AP) rather than accuracy alone.
 
-## Methods
+Table 1. Test Results for Selected Model Comparisons
 
-The team used a reproducible, stratified 80/20 split: 2,860 training records and 715 test records, including 115 at-risk test companies. Models included a constant-score baseline, logistic regression, random forest, and gradient boosting. Scaling and sector encoding were fitted inside training pipelines, including during five-fold cross-validation. Evaluation included precision, recall, F1, ROC-AUC, and average precision (AP), the precision–recall measure called PR-AUC in the notebooks. Permutation importance measured how test AP changed when an input was shuffled.
+| Model | ROC-AUC | Test AP | Recall |
+|---|---:|---:|---:|
+| Logistic all | 0.968 | 0.890 | 0.922 |
+| Boosting all | 1.000 | 1.000 | 0.991 |
+| Boosting reduced | 0.607 | 0.378 | 0.226 |
 
-## Findings
+The all-features models scored very highly, but we should be cautious: they may be learning the way the labels were created. Our feature importance analysis showed that the original gradient boosting model relied most on debt-to-equity ratio.
 
-With all features, logistic regression achieved test AP 0.890, precision 0.671, and recall 0.922. Random forest achieved test AP 1.000; gradient boosting also achieved AP 1.000. These high scores require caution: they may reflect reconstruction of the dataset's labeling rule rather than real-world financial-risk prediction.
+Removing debt-to-equity ratio, cash flow, and total liabilities and retraining reduced test AP to 0.378, versus a 0.161 constant-score baseline. Net income became the most important remaining input. At the default threshold, the reduced model identified only 22.6% of at-risk test companies. Its above-baseline ranking score therefore does not mean it catches most at-risk companies.
 
-The all-features gradient boosting model relied most on debt-to-equity ratio: shuffling it reduced AP by 0.772 on average. Following the team's prespecified comparison, removing debt-to-equity ratio, cash flow, and total liabilities reduced the refitted model's test AP to 0.378, compared with a constant-score baseline of 0.161. Net income became the strongest remaining input, but it may act as a proxy for cash flow. Feature importance measures model reliance, not causation.
+## Recommendations
 
-The reduced model's precision was 0.394 and recall 0.226 at the default threshold. Thus, its above-baseline ranking score does not translate into reliably identifying most at-risk companies at that threshold.
+1. Complete the label-sensitivity analysis to check whether the high scores mainly reflect how the labels were assigned.
+2. Keep the current models exploratory. Before practical use, confirm label definitions and test on independent or later-period data.
+3. Choose any future decision threshold around the cost of missed risk versus false alarms, using training data rather than repeated test-set adjustments.
+4. Finish the tuning interpretation review and the team's fresh-clone reproducibility check before submission.
 
-The independently rerun tuning notebook found only a tiny logistic-regression change: test AP 0.3415 to 0.3416. Gradient boosting remained at AP 0.3784. This search found no meaningful improvement; it does not rule out benefits from other settings or models. The tuning interpretation is still under review.
+## Analytical Overview
 
-## Implications and limitations
+We used a stratified 80/20 split with a fixed seed: 2,860 training records and 715 test records, including 115 at-risk test companies. We compared a baseline, logistic regression, random forest, and gradient boosting. Scaling and sector encoding were fitted inside training pipelines and five-fold cross-validation. Permutation importance measured the score decrease after shuffling an input. A separate tuning notebook reproduced only a tiny logistic-regression change in test AP (0.3415 to 0.3416), with no change for gradient boosting; its interpretation remains under review.
 
-The current models are exploratory tools for understanding this dataset, not validated lending or investment decision systems. Removing three suspected inputs does not prove that label-related information has been eliminated. Reuse of the same test sample across analyses also limits claims of independent validation.
+## Risks and Limitations
 
-Before final submission, incorporate the team's label-sensitivity analysis, resolve the tuning interpretation review, and complete the fresh-clone reproducibility check. Before practical use, establish label provenance, information availability at prediction time, and performance on independent or later-period data. Report the near-perfect scores with these limitations rather than as evidence of forecasting ability.
-
-## Evidence
-
-Executed results: [numerical EDA](../notebooks/01_eda_numerical.ipynb), [core modeling](../notebooks/04_modeling.ipynb), and [feature importance](../notebooks/05_feature_importance.ipynb). Tuning results were reproduced from [PR #25](https://github.com/phoyo008/CAP_3764_2026_Fall_team_2/pull/25) at commit `90f431e`; its interpretation review and the sensitivity analysis remain pending.
+Feature importance measures model reliance, not causes of distress. Related inputs such as net income and cash flow may substitute for one another; removing three columns does not prove label-related information is gone. Companies appear once across 40 quarter-end dates from 2015 to 2024, without company histories or a future target for forecasting. Test-set reuse limits independent validation claims. Label provenance, sensitivity results, and external validation remain unresolved.
