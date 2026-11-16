@@ -190,7 +190,7 @@ done to verify, push, and prepare the PR.
 - [x] Data collection module and cleaning notebook with documented missing-value strategy
 - [x] Numerical and categorical EDA with tables and visualizations
 - [x] Modeling, feature importance, leakage/sensitivity and tuning notebooks
-- [ ] Fresh-clone reproducibility check (env, collect, clean, tests, every notebook)
+- [x] Fresh-clone reproducibility check (env, collect, clean, tests, every notebook)
 - [ ] Executive summary (`reports/executive_summary.md`, max 600 words)
 - [ ] Slide deck
 - [ ] 10-minute YouTube video: link — _TBD_
