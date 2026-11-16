@@ -1,8 +1,9 @@
 # CAP 3764 — Corporate Financial Risk Assessment (Team 2)
 
-Final project for CAP 3764, Fall 2026. This first submission covers repo setup,
-data collection, cleaning, and initial EDA — modeling/forecasting comes later
-(Module 8).
+Final project for CAP 3764, Fall 2026. The repo covers the full data science lifecycle:
+data collection, cleaning, numerical and categorical EDA, classification modeling with
+feature importance, leakage/sensitivity checks and hyperparameter tuning, and an executive
+summary.
 
 **Dataset:** [Corporate Financial Risk Assessment Dataset](https://www.kaggle.com/datasets/zoya77/corporate-financial-risk-assessment-dataset)
 (Kaggle) — 5,000 company records (3,575 after cleaning), 20 columns covering financial figures
@@ -59,10 +60,20 @@ Run from the project root inside the `cap3764-risk` environment:
 ```bash
 python src/risk_data/collect.py   # 1. download raw data from Kaggle -> data/raw/
 python src/risk_data/clean.py     # 2. clean -> data/processed/cleaned_data.csv
-jupyter lab                       # 3. open the notebooks with the "Python (cap3764-risk)" kernel
+python -m pytest -q               # 3. run the tests for src/risk_data
+jupyter lab                       # 4. open the notebooks with the "Python (cap3764-risk)" kernel
 ```
 
 Data files are gitignored, so steps 1-2 must be run once on each machine.
+
+Run the notebooks in numeric order (00, 01, 02, 04, 05, 06, 07). There is no `03`: the
+numbers follow the lifecycle stages and modeling starts at 04. Every notebook loads data
+through `risk_data`, so they only need `data/raw/` and `data/processed/` from steps 1-2.
+To execute them all without opening JupyterLab (from the project root):
+
+```bash
+jupyter nbconvert --to notebook --execute --inplace notebooks/*.ipynb
+```
 
 ## Project Structure
 
@@ -80,6 +91,7 @@ notebooks/
 └── 07_tuning.ipynb               # (Lilly)
 reports/figures/                  # exported charts
 tests/                            # pytest tests for src/risk_data
+scripts/sync_skills.sh            # mirrors .agents/skills/ into .claude/skills/
 docs/TEAM_WORKFLOW.md             # task assignments, reviewers, timeline
 docs/MODELING_NOTES.md            # modeling findings and notebook briefs
 AGENTS.md                         # rules for AI agents and teammates
@@ -119,6 +131,23 @@ Preliminary insights:
 - The sector differences are **not statistically significant** (chi-square p = 0.18).
 - Ratio differences between sectors are small and inconsistent.
 
+## Modeling
+
+Shared code lives in `src/risk_data/modeling.py` (stratified split, preprocessing fitted on
+the training set only, cross-validation, metrics), so every modeling notebook uses the same
+split and pipelines. Because only ~16% of rows are at risk, results are reported as
+precision, recall, F1, ROC-AUC and PR-AUC, not accuracy alone.
+
+| Notebook | What it does |
+|----------|--------------|
+| `04_modeling.ipynb` | Baseline and core classifiers, test-set metrics, ROC/PR curves |
+| `05_feature_importance.ipynb` | Which features drive the gradient boosting model |
+| `06_leakage_and_sensitivity.ipynb` | Checks whether the label is reproduced by a simple rule (leakage) and how results change with the setup (sensitivity) |
+| `07_tuning.ipynb` | Cross-validated hyperparameter search |
+
+Findings and briefs are in [`docs/MODELING_NOTES.md`](docs/MODELING_NOTES.md). The headline results
+are in the executive summary (`reports/executive_summary.md`).
+
 ## Team & GitHub Workflow
 
 | Person   | Branch                    | Task                                                         | PR |
@@ -153,18 +182,16 @@ Read [`AGENTS.md`](AGENTS.md) first. Run `/load-working` (Claude Code) or `$load
 sync with `main` and start your assigned task, and `/cap3764-handoff` or `$cap3764-handoff` when you are
 done to verify, push, and prepare the PR.
 
-## Next Steps
-
-- Decide how to treat the 1,425 removed duplicates and the extreme values flagged by the IQR audit.
-- Feature engineering and a baseline classifier for `Financial_Risk_Label`, handling the 84/16 class imbalance.
-- Check whether macro indicators (GDP, interest, inflation) add signal beyond company ratios.
-
 ## Submission Checklist
 
-- [x] Team repo, per-task branches, pull requests
+- [x] Team repo, per-task branches, pull requests with reviews
 - [x] Conda environment (`environment-cap3764-final-project.yml`, pinned versions)
-- [x] Data collection module and initial cleaning
+- [x] Installable `risk_data` package with pytest tests
+- [x] Data collection module and cleaning notebook with documented missing-value strategy
 - [x] Numerical and categorical EDA with tables and visualizations
+- [x] Modeling, feature importance, leakage/sensitivity and tuning notebooks
+- [x] Fresh-clone reproducibility check (env, collect, clean, tests, every notebook)
+- [ ] Executive summary (`reports/executive_summary.md`, max 600 words)
 - [ ] Slide deck
 - [ ] 10-minute YouTube video: link — _TBD_
 - [ ] Peer-review forms (each member)
